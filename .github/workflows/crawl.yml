@@ -1,0 +1,57 @@
+name: Crawl Instagram profile
+
+on:
+  workflow_dispatch:
+    inputs:
+      username:
+        description: "Instagram username to crawl"
+        default: "for_everyoung10"
+      max_posts:
+        description: "Max NEW posts to fetch this run (0 = all)"
+        default: "0"
+  schedule:
+    - cron: "17 9 * * *" # daily, 09:17 UTC
+
+permissions:
+  contents: write
+
+concurrency:
+  group: crawl
+  cancel-in-progress: false
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Crawl
+        env:
+          IG_USERNAME: ${{ github.event.inputs.username || 'for_everyoung10' }}
+          MAX_POSTS: ${{ github.event.inputs.max_posts || '0' }}
+          # Optional (recommended if Instagram blocks the runner). See README.
+          IG_LOGIN_USER: ${{ secrets.IG_LOGIN_USER }}
+          IG_SESSION_B64: ${{ secrets.IG_SESSION_B64 }}
+        run: python scripts/crawl.py
+
+      - name: Commit new media + index
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          if git diff --cached --quiet; then
+            echo "Nothing new."
+          else
+            git commit -m "Update archive ($(date -u +%F))"
+            git pull --rebase origin "${GITHUB_REF_NAME}" || true
+            git push
+          fi

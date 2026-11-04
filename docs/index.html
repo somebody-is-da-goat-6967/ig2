@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Archive</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1 id="title">Archive</h1>
+      <p id="sub"></p>
+    </div>
+    <div class="controls">
+      <input id="q" type="search" placeholder="Search captions…" aria-label="Search captions">
+      <select id="type" aria-label="Filter by type">
+        <option value="all">All</option>
+        <option value="image">Images</option>
+        <option value="video">Videos</option>
+      </select>
+      <select id="sort" aria-label="Sort">
+        <option value="new">Newest</option>
+        <option value="old">Oldest</option>
+        <option value="likes">Most liked</option>
+        <option value="shuffle">Shuffled</option>
+      </select>
+      <label class="size">Size <input id="size" type="range" min="110" max="420" value="220"></label>
+      <button id="btn-random" class="primary" title="Open a random item (R)">Random</button>
+      <button id="btn-slideshow" title="Start slideshow">Slideshow</button>
+    </div>
+  </header>
+
+  <section id="hero" hidden>
+    <div class="hero-media" id="hero-media"></div>
+    <div class="hero-side">
+      <span class="eyebrow">Random pick</span>
+      <p id="hero-caption"></p>
+      <p id="hero-meta" class="meta"></p>
+      <div class="row">
+        <button id="hero-again" class="primary">Another one</button>
+        <button id="hero-open">Open</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="count" class="count"></div>
+  <main id="grid" class="grid"></main>
+  <div id="sentinel"></div>
+  <div id="empty" class="empty" hidden>
+    <p>Nothing to show yet.</p>
+    <p class="small">Run the <b>Crawl Instagram profile</b> workflow in the Actions tab, then reload.</p>
+  </div>
+
+  <div id="lightbox" class="lightbox" hidden>
+    <div class="lb-bar">
+      <span id="lb-count" class="lb-count"></span>
+      <div class="lb-tools">
+        <button id="lb-shuffle" title="Random order (R)" aria-pressed="false">Shuffle</button>
+        <button id="lb-play" title="Slideshow (Space)">Play</button>
+        <button id="lb-zoom-out" title="Zoom out (-)">−</button>
+        <button id="lb-zoom-reset" title="Reset zoom (0)">100%</button>
+        <button id="lb-zoom-in" title="Zoom in (+)">+</button>
+        <button id="lb-info" title="Info (I)">Info</button>
+        <a id="lb-download" title="Download (D)" download>Save</a>
+        <button id="lb-full" title="Fullscreen (F)">Full</button>
+        <button id="lb-close" title="Close (Esc)">✕</button>
+      </div>
+    </div>
+    <button id="lb-prev" class="nav prev" aria-label="Previous">‹</button>
+    <div id="lb-stage" class="stage"></div>
+    <button id="lb-next" class="nav next" aria-label="Next">›</button>
+    <aside id="lb-panel" class="panel" hidden>
+      <p id="lb-caption"></p>
+      <p id="lb-meta" class="meta"></p>
+      <a id="lb-origin" target="_blank" rel="noopener noreferrer">View original post</a>
+    </aside>
+    <div id="lb-strip" class="strip"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
